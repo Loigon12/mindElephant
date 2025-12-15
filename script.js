@@ -25,7 +25,6 @@ function handleLogin() {
     return;
   }
 
-  // ✅ Conexión real con Firebase (descomenta en tu proyecto)
   auth.signInWithEmailAndPassword(email, password)
     .catch(err => {
       alert('Error al iniciar sesión: ' + (err.message || 'Intenta de nuevo.'));
@@ -39,7 +38,6 @@ function handleSignUp() {
   const confirm = document.getElementById('signup-confirm').value;
   const fullname = document.getElementById('fullname').value;
 
-  // Validación
   if (!email || !password) {
     alert('Por favor ingresa correo y contraseña.');
     return;
@@ -53,12 +51,10 @@ function handleSignUp() {
     return;
   }
 
-  // ✅ Crear usuario en Firebase
   auth.createUserWithEmailAndPassword(email, password)
     .then(async (userCredential) => {
       const user = userCredential.user;
 
-      // Guardar datos en Firestore
       await db.collection('users').doc(user.uid).set({
         name: fullname || email.split('@')[0],
         email: user.email,
@@ -79,11 +75,22 @@ function handleSignUp() {
     });
 }
 
-// ─── GOOGLE SIGN-IN ───────────────────────────────────────────────────
+// ─── GOOGLE SIGN-IN CON REDIRECCIÓN ───────────────────────────────────
 function signInWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider)
-    .catch(err => {
-      alert('Error con Google: ' + err.message);
-    });
+  auth.signInWithRedirect(provider);
 }
+
+// Manejar resultado de redirección
+auth.getRedirectResult()
+  .then((result) => {
+    if (result.user) {
+      console.log("✅ Usuario logueado:", result.user);
+      // Aquí puedes redirigir a tu agenda o mostrar un mensaje
+      // Ejemplo: window.location.href = "agenda.html";
+    }
+  })
+  .catch((error) => {
+    console.error("⚠️ Error en redirect:", error);
+    alert('Error con Google: ' + error.message);
+  });
