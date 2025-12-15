@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MindElephant — Tu memoria digital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="login-container">
+    <div class="card" id="login-card">
+      <!-- ▼ LOGIN PRINCIPAL ▼ -->
+      <div class="logo-container">
+        <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <path d="M30,40 C20,50 25,70 45,65 C55,75 75,70 80,50 C85,35 75,25 60,30 C55,25 45,25 40,30 C35,25 25,25 20,35 C15,45 25,50 30,40 Z" fill="none" stroke="#5e7d5e" stroke-width="2"/>
+          <circle cx="50" cy="50" r="8" fill="#d4a017" opacity="0.8"/>
+        </svg>
+        <h1 class="logo-text">MindElephant</h1>
+      </div>
+      <p class="tagline">Donde las ideas nunca se olvidan</p>
+
+      <input type="email" id="email" class="input" placeholder="Correo electrónico" autocomplete="email" />
+      <input type="password" id="password" class="input" placeholder="Contraseña" autocomplete="current-password" />
+
+      <button class="btn primary-btn" onclick="handleLogin()">Iniciar Sesión</button>
+      <button class="btn secondary-btn" onclick="showSignupPanel()">Crear Cuenta</button>
+
+      <div class="divider">o</div>
+
+      <button class="btn google-btn" onclick="signInWithGoogle()">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" height="18" />
+        Continuar con Google
+      </button>
+
+      <!-- ▼ PANEL DE REGISTRO ▼ -->
+      <div id="signup-panel" class="signup-panel">
+        <button class="back-btn" onclick="showLoginPanel()">← Volver a Iniciar Sesión</button>
+        
+        <div class="logo-container">
+          <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M30,40 C20,50 25,70 45,65 C55,75 75,70 80,50 C85,35 75,25 60,30 C55,25 45,25 40,30 C35,25 25,25 20,35 C15,45 25,50 30,40 Z" fill="none" stroke="#5e7d5e" stroke-width="2"/>
+            <circle cx="50" cy="50" r="8" fill="#d4a017" opacity="0.8"/>
+          </svg>
+          <h2 class="panel-title">Crea tu mente digital</h2>
+        </div>
+
+        <input type="text" id="fullname" class="input" placeholder="Nombre completo (opcional)" />
+        <input type="email" id="signup-email" class="input" placeholder="Correo electrónico" autocomplete="email" />
+        <input type="password" id="signup-password" class="input" placeholder="Contraseña (mín. 6 caracteres)" autocomplete="new-password" />
+        <input type="password" id="signup-confirm" class="input" placeholder="Confirma tu contraseña" />
+
+        <button class="btn primary-btn" onclick="handleSignUp()">Crear Cuenta</button>
+
+        <p class="hint">
+          Al registrarte, aceptas nuestros <a href="#">Términos</a> y <a href="#">Política de Privacidad</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="firebase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
