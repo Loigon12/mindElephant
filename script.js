@@ -70,18 +70,18 @@ function createAgendaInterface() {
     </div>
     <nav style="flex: 1; padding: 1rem 0;">
       <div class="nav-item active" data-section="ideas" style="display: flex; align-items: center; gap: 1rem; padding: 0.9rem 1.5rem; cursor: pointer; color: #495057; font-weight: 500;">
-        <span>💡</span> <span>Ideas</span>
+        <span></span> <span>Ideas</span>
       </div>
       <div class="nav-item" data-section="reminders" style="display: flex; align-items: center; gap: 1rem; padding: 0.9rem 1.5rem; cursor: pointer; color: #495057; font-weight: 500;">
-        <span>🔔</span> <span>Recordatorios</span>
+        <span></span> <span>Recordatorios</span>
       </div>
       <div class="nav-item" data-section="dates" style="display: flex; align-items: center; gap: 1rem; padding: 0.9rem 1.5rem; cursor: pointer; color: #495057; font-weight: 500;">
-        <span>📅</span> <span>Fechas</span>
+        <span></span> <span>Fechas</span>
       </div>
     </nav>
     <div style="padding: 0 0 1.5rem;">
       <button onclick="logout()" style="display: flex; align-items: center; gap: 1rem; width: calc(100% - 3rem); margin: 0 1.5rem; padding: 0.75rem; background: #e57373; color: white; border: none; border-radius: 50px; font-family: inherit; font-weight: 600; cursor: pointer; transition: all 0.2s;">
-        <span>🚪</span> <span>Salir</span>
+        <span></span> <span>Salir</span>
       </button>
     </div>
   `;
@@ -98,7 +98,7 @@ function createAgendaInterface() {
 
   main.innerHTML = `
     <div id="section-header" style="margin-bottom: 1.5rem;">
-      <h1 style="font-size: 1.8rem; color: #495057; margin-bottom: 0.4rem;">🧠 Mi Agenda</h1>
+      <h1 style="font-size: 1.8rem; color: #495057; margin-bottom: 0.4rem;">Mi Agenda</h1>
       <p id="section-subtitle" style="color: #6c757d; font-weight: 500;">¿Qué tienes en mente hoy?</p>
     </div>
     <div id="section-content" style="flex: 1;">
@@ -131,8 +131,8 @@ async function loadSection(section) {
 
   const titles = {
     ideas: '💡 Ideas',
-    reminders: '🔔 Recordatorios',
-    dates: '📅 Fechas Importantes'
+    reminders: 'Recordatorios',
+    dates: 'Fechas Importantes'
   };
 
   const subtitles = {
@@ -145,7 +145,7 @@ async function loadSection(section) {
     ideas: `Ej: 
 • Diseñar MindElephant v2
 • Leer 'Sapiens' antes de fin de año
-• Aprender a tocar piano 🎹`,
+• Aprender a tocar piano `,
     reminders: `Ej: 
 • Llamar a mamá (viernes 18:00)
 • Revisar contrato (antes del 30)
@@ -188,7 +188,7 @@ async function loadSection(section) {
   } catch (err) {
     console.error('Error cargando sección:', err);
     document.getElementById('section-content').innerHTML = `
-      <div style="text-align: center; color: #e57373; padding: 2rem;">⚠️ Error al cargar. Revisa tu conexión.</div>
+      <div style="text-align: center; color: #e57373; padding: 2rem;"> Error al cargar. Revisa tu conexión.</div>
     `;
   }
 }
@@ -201,7 +201,7 @@ async function saveToFirestore(section, value) {
       [section]: value,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     });
-    console.log(`✅ ${section} guardado`);
+    console.log(`${section} guardado`);
   } catch (err) {
     console.error('Error al guardar:', err);
   }
@@ -225,7 +225,7 @@ function handleSignUp() {
 
   if (!email || !password) return alert('Correo y contraseña obligatorios.');
   if (password.length < 6) return alert('Contraseña ≥6 caracteres.');
-  if (password !== confirm) return alert('❌ Las contraseñas no coinciden.');
+  if (password !== confirm) return alert('Las contraseñas no coinciden.');
 
   auth.createUserWithEmailAndPassword(email, password)
     .then(async (userCredential) => {
@@ -238,7 +238,7 @@ function handleSignUp() {
         dates: '',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
-      alert(`🎉 ¡Cuenta creada!\nBienvenido a MindElephant, ${fullname || 'amigo'} 🐘`);
+      alert(`¡Cuenta creada!\nBienvenido a MindElephant, ${fullname || 'amigo'} `);
     })
     .catch(err => {
       let msg = err.message;
@@ -258,11 +258,11 @@ function signInWithGoogle() {
 auth.getRedirectResult()
   .then((result) => {
     if (result.user) {
-      console.log("✅ Login con Google exitoso");
+      console.log("Login con Google exitoso");
     }
   })
   .catch((error) => {
-    console.error("⚠️ Error en Google Sign-In:", error);
+    console.error("Error en Google Sign-In:", error);
     alert('Error con Google: ' + error.message);
   });
 
@@ -271,7 +271,7 @@ function logout() {
   auth.signOut();
 }
 
-// ─── CONTROL DE PANELES (login/signup) ──────────────────────────────────
+// ─── CONTROL DE PANELES (login/signup) -──────────────────────────────────
 function showLoginPanel() {
   const panel = document.getElementById('signup-panel');
   if (panel) {
