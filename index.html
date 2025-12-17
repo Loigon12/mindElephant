@@ -6,33 +6,6 @@
   <title>MindElephant — Tu memoria digital</title>
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
-  <!-- Estilos toast (para reemplazar alert) -->
-  <style>
-    #toast-container {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 9999;
-    }
-    .toast {
-      background: #e57373;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-weight: 500;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      margin-bottom: 10px;
-      animation: fadeIn 0.3s, fadeOut 0.5s 2.5s forwards;
-    }
-    .toast.success { background: #66bb6a; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeOut {
-      to { opacity: 0; transform: translateY(-20px); }
-    }
-  </style>
 
   <!-- Firebase SDKs (modo compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -40,78 +13,123 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
-  <div class="login-container">
-    <div class="card" id="login-card">
-      <!-- LOGIN PRINCIPAL -->
-      <div class="logo-container">
+  <!-- ▼ PÁGINA DE INICIO (LANDING) ▼ -->
+  <div id="landing" class="landing">
+    <header class="landing-header">
+      <div class="logo">
         <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
           <path d="M30,40 C20,50 25,70 45,65 C55,75 75,70 80,50 C85,35 75,25 60,30 C55,25 45,25 40,30 C35,25 25,25 20,35 C15,45 25,50 30,40 Z" fill="none" stroke="#5e7d5e" stroke-width="2"/>
           <circle cx="50" cy="50" r="8" fill="#d4a017" opacity="0.8"/>
         </svg>
-        <h1 class="logo-text">MindElephant</h1>
+        <span class="logo-text">MindElephant</span>
       </div>
-      <p class="tagline">Donde las ideas nunca se olvidan</p>
+      <div class="auth-buttons">
+        <button class="btn secondary-btn" id="btn-login-landing">Iniciar Sesión</button>
+        <button class="btn primary-btn" id="btn-signup-landing">Crear Cuenta</button>
+      </div>
+    </header>
 
-      <input type="email" id="email" class="input" placeholder="Correo electrónico" autocomplete="email" />
+    <main class="landing-main">
+      <h1 class="hero-title">Donde las ideas nunca se olvidan</h1>
+      <p class="hero-subtitle">
+        MindElephant es tu espacio tranquilo para capturar lo que importa:  
+        ideas fugaces, recordatorios esenciales y fechas que marcan tu camino.
+      </p>
 
-      <div class="input-group" style="position: relative;">
-        <input type="password" id="password" class="input" placeholder="Contraseña" autocomplete="current-password" />
-        <button type="button" class="toggle-password"
-                onclick="togglePassword('password')"
-                style="position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #adb5bd; cursor: pointer; font-size: 1.2rem;">👁️</button>
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">💡</div>
+          <h3>Ideas</h3>
+          <p>Anota sin presión. Sin formato, sin reglas. Solo tú y tus pensamientos.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🔔</div>
+          <h3>Recordatorios</h3>
+          <p>Lo que no puedes olvidar: llamadas, tareas, promesas.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📅</div>
+          <h3>Fechas</h3>
+          <p>Momentos que esperas, plazos que respetas, ciclos que celebras.</p>
+        </div>
       </div>
 
-      <button class="btn primary-btn" onclick="handleLogin()">Iniciar Sesión</button>
-      <button class="btn secondary-btn" onclick="showSignupPanel()">Crear Cuenta</button>
+      <div class="philosophy">
+        <p>
+          <strong>Inspirado en la memoria del elefante</strong> — fuerte, afectuosa, duradera.  
+          Aquí no hay notificaciones invasivas, ni algoritmos que decidan por ti.  
+          Solo un lugar seguro, tuyo.
+        </p>
+      </div>
 
-      <div class="divider">o</div>
+      <button class="btn primary-btn btn-large" id="btn-get-started">Comenzar</button>
+    </main>
+  </div>
 
-      <button class="btn google-btn" onclick="signInWithGoogle()">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" height="18" alt="Google" />
-        Continuar con Google
-      </button>
-
-      <!-- ▼ PANEL DE REGISTRO ▼ -->
-      <div id="signup-panel" class="signup-panel">
-        <button class="back-btn" onclick="showLoginPanel()">← Volver a Iniciar Sesión</button>
-        <div class="logo-container">
-          <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- ▼ MODAL: Login / Signup ▼ -->
+  <div id="auth-modal" class="auth-modal">
+    <div class="auth-card">
+      <!-- Login -->
+      <div id="login-form" class="auth-form">
+        <button class="close-btn" onclick="closeAuthModal()">×</button>
+        <div class="logo-center">
+          <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="40">
             <path d="M30,40 C20,50 25,70 45,65 C55,75 75,70 80,50 C85,35 75,25 60,30 C55,25 45,25 40,30 C35,25 25,25 20,35 C15,45 25,50 30,40 Z" fill="none" stroke="#5e7d5e" stroke-width="2"/>
             <circle cx="50" cy="50" r="8" fill="#d4a017" opacity="0.8"/>
           </svg>
-          <h2 class="panel-title">Crea tu mente digital</h2>
+          <h2>Iniciar Sesión</h2>
         </div>
+        <input type="email" id="email" class="input" placeholder="Correo electrónico" autocomplete="email" />
+        <div class="input-group">
+          <input type="password" id="password" class="input" placeholder="Contraseña" autocomplete="current-password" />
+          <button type="button" class="toggle-password" onclick="togglePassword('password')">👁️</button>
+        </div>
+        <button class="btn primary-btn full" onclick="handleLogin()">Continuar</button>
+        <div class="divider">o</div>
+        <button class="btn google-btn full" onclick="signInWithGoogle()">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" height="18" alt="Google" />
+          Continuar con Google
+        </button>
+        <p class="switch-text">
+          ¿Eres nuevo? <a href="#" onclick="showSignupForm(); return false;">Crear cuenta</a>
+        </p>
+      </div>
 
-        <input type="text" id="fullname" class="input" placeholder="Nombre completo (opcional)" />
-
+      <!-- Signup -->
+      <div id="signup-form" class="auth-form" style="display: none;">
+        <button class="close-btn" onclick="closeAuthModal()">×</button>
+        <div class="logo-center">
+          <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="40">
+            <path d="M30,40 C20,50 25,70 45,65 C55,75 75,70 80,50 C85,35 75,25 60,30 C55,25 45,25 40,30 C35,25 25,25 20,35 C15,45 25,50 30,40 Z" fill="none" stroke="#5e7d5e" stroke-width="2"/>
+            <circle cx="50" cy="50" r="8" fill="#d4a017" opacity="0.8"/>
+          </svg>
+          <h2>Crear Cuenta</h2>
+        </div>
+        <input type="text" id="fullname" class="input" placeholder="Nombre (opcional)" />
         <input type="email" id="signup-email" class="input" placeholder="Correo electrónico" autocomplete="email" />
-
-        <div class="input-group" style="position: relative;">
-          <input type="password" id="signup-password" class="input" placeholder="Contraseña (mín. 6 caracteres)" autocomplete="new-password" />
-          <button type="button" class="toggle-password"
-                  onclick="togglePassword('signup-password')"
-                  style="position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #adb5bd; cursor: pointer; font-size: 1.2rem;">👁️</button>
+        <div class="input-group">
+          <input type="password" id="signup-password" class="input" placeholder="Contraseña (≥6 caracteres)" autocomplete="new-password" />
+          <button type="button" class="toggle-password" onclick="togglePassword('signup-password')">👁️</button>
         </div>
-
-        <div class="input-group" style="position: relative;">
+        <div class="input-group">
           <input type="password" id="signup-confirm" class="input" placeholder="Confirma tu contraseña" />
-          <button type="button" class="toggle-password"
-                  onclick="togglePassword('signup-confirm')"
-                  style="position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #adb5bd; cursor: pointer; font-size: 1.2rem;">👁️</button>
+          <button type="button" class="toggle-password" onclick="togglePassword('signup-confirm')">👁️</button>
         </div>
-
-        <button class="btn primary-btn" onclick="handleSignUp()">Crear Cuenta</button>
-        <p class="hint">
-          Al registrarte, aceptas nuestros <a href="#">Términos</a> y <a href="#">Política de Privacidad</a>.
+        <button class="btn primary-btn full" onclick="handleSignUp()">Crear mi espacio</button>
+        <p class="switch-text">
+          ¿Ya tienes cuenta? <a href="#" onclick="showLoginForm(); return false;">Iniciar sesión</a>
         </p>
       </div>
     </div>
   </div>
 
-  <!-- Toast container (dinámico; se crea si no existe) -->
+  <!-- ▼ CONTENEDOR DE LA AGENDA (dinámico) ▼ -->
+  <div id="app-container" style="display: none;"></div>
+
+  <!-- Toast container -->
   <div id="toast-container"></div>
 
-  <!-- Scripts (orden crítico) -->
+  <!-- Scripts -->
   <script src="firebaseConfig.js"></script>
   <script src="script.js"></script>
 </body>

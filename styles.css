@@ -1,13 +1,12 @@
-/* ─── MIND ELEPHANT THEME — Inspirado en la calma, fuerza y memoria del elefante ─── */
+/* ── VARIABLES GLOBALES ── */
 :root {
-  /* Paleta suave y natural */
-  --gray-soft: #e9ecef;      /* piel suave */
-  --gray-mid: #adb5bd;       /* sombra */
-  --gray-deep: #495057;      /* inteligencia */
-  --ivory: #f8f4e9;          /* colmillo / claridad */
-  --sage: #8a9a8d;           /* bosque / equilibrio */
-  --moss: #5e7d5e;           /* profundidad / memoria */
-  --amber: #d4a017;          /* sabiduría / atención */
+  --gray-soft: #e9ecef;
+  --gray-mid: #adb5bd;
+  --gray-deep: #495057;
+  --ivory: #f8f4e9;
+  --sage: #8a9a8d;
+  --moss: #5e7d5e;
+  --amber: #d4a017;
   --font-main: 'Quicksand', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
@@ -19,59 +18,40 @@
 
 body {
   font-family: var(--font-main);
-  background: var(--ivory);
   color: var(--gray-deep);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 1rem;
-  overflow: hidden;
-}
-
-.login-container {
-  width: 100%;
-  max-width: 420px;
-}
-
-.card {
   background: white;
-  border-radius: 28px;
-  box-shadow: 0 12px 40px rgba(94, 125, 94, 0.15);
-  padding: 2.5rem;
-  position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
-.card::before {
-  content: '';
-  position: absolute;
-  top: -40px;
-  right: -40px;
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  background: var(--amber);
-  opacity: 0.06;
-  z-index: 0;
+/* ── LANDING ── */
+.landing {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #f9f7f0 0%, #f0f4e8 100%);
+  padding: 2rem 1.5rem;
 }
 
-.logo-container {
+.landing-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.logo {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 0.8rem;
-  position: relative;
-  z-index: 1;
+  gap: 0.8rem;
 }
 
 .logo-icon {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
 }
 
 .logo-text {
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   font-weight: 800;
   background: linear-gradient(90deg, var(--moss), var(--amber));
   -webkit-background-clip: text;
@@ -79,23 +59,187 @@ body {
   color: transparent;
 }
 
-.tagline {
-  text-align: center;
-  color: var(--gray-mid);
-  margin-bottom: 1.8rem;
-  font-weight: 500;
-  position: relative;
-  z-index: 1;
+.auth-buttons {
+  display: flex;
+  gap: 0.8rem;
 }
 
-/* ─── INPUTS ───────────────────────────────────────────────────────────── */
+.btn {
+  padding: 0.7rem 1.4rem;
+  border-radius: 50px;
+  font-family: var(--font-main);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.primary-btn {
+  background: var(--moss);
+  color: white;
+}
+
+.primary-btn:hover {
+  background: #4e6c4e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(94, 125, 94, 0.25);
+}
+
+.secondary-btn {
+  background: white;
+  border: 2px solid var(--moss);
+  color: var(--moss);
+}
+
+.secondary-btn:hover {
+  background: var(--moss);
+  color: white;
+}
+
+.btn-large {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  margin-top: 2rem;
+}
+
+.landing-main {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.hero-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: var(--gray-deep);
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  color: var(--gray-mid);
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.feature {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+  transition: transform 0.3s;
+}
+
+.feature:hover {
+  transform: translateY(-6px);
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--moss);
+}
+
+.feature h3 {
+  font-size: 1.4rem;
+  margin-bottom: 0.8rem;
+  color: var(--gray-deep);
+}
+
+.feature p {
+  color: var(--gray-mid);
+  line-height: 1.6;
+}
+
+.philosophy {
+  background: rgba(94, 125, 94, 0.05);
+  padding: 2rem;
+  border-radius: 20px;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.philosophy p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--gray-deep);
+}
+
+.philosophy strong {
+  color: var(--moss);
+}
+
+/* ── MODAL DE AUTENTICACIÓN ── */
+.auth-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-card {
+  background: white;
+  border-radius: 28px;
+  width: 95%;
+  max-width: 420px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+.auth-form {
+  padding: 2.5rem;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  color: var(--gray-mid);
+  cursor: pointer;
+}
+
+.logo-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.8rem;
+}
+
+.logo-center h2 {
+  font-size: 1.8rem;
+  color: var(--gray-deep);
+}
+
 .input {
   width: 100%;
   padding: 1rem 1.3rem;
   border: 2px solid var(--gray-soft);
   border-radius: 50px;
   font-size: 1.05rem;
-  font-family: var(--font-main);
   margin-bottom: 1rem;
   background: white;
   transition: all 0.3s;
@@ -107,7 +251,6 @@ body {
   box-shadow: 0 0 0 4px rgba(94, 125, 94, 0.15);
 }
 
-/* Input con ícono de toggle (👁️) */
 .input-group {
   position: relative;
   margin-bottom: 1rem;
@@ -123,61 +266,10 @@ body {
   color: var(--gray-mid);
   cursor: pointer;
   font-size: 1.2rem;
-  padding: 0;
 }
 
-.toggle-password:hover {
-  color: var(--moss);
-}
-
-/* ─── BOTONES ──────────────────────────────────────────────────────────── */
-.btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.7rem;
+.full {
   width: 100%;
-  padding: 0.95rem;
-  border-radius: 50px;
-  font-family: var(--font-main);
-  font-weight: 600;
-  font-size: 1.05rem;
-  cursor: pointer;
-  transition: all 0.3s;
-  border: none;
-}
-
-.primary-btn {
-  background: var(--moss);
-  color: white;
-}
-
-.primary-btn:hover {
-  background: #4e6c4e;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(94, 125, 94, 0.3);
-}
-
-.secondary-btn {
-  background: transparent;
-  border: 2px solid var(--moss);
-  color: var(--moss);
-}
-
-.secondary-btn:hover {
-  background: var(--moss);
-  color: white;
-}
-
-.google-btn {
-  background: white;
-  color: #333;
-  border: 1px solid #ddd;
-  margin-top: 0.5rem;
-}
-
-.google-btn:hover {
-  background: #f8f9fa;
 }
 
 .divider {
@@ -193,7 +285,7 @@ body {
   content: '';
   position: absolute;
   top: 50%;
-  width: 40%;
+  width: 42%;
   height: 1px;
   background: var(--gray-soft);
 }
@@ -201,166 +293,92 @@ body {
 .divider::before { left: 0; }
 .divider::after { right: 0; }
 
-/* ─── PANEL DE REGISTRO ───────────────────────────────────────────────── */
-.signup-panel {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  padding: 2.5rem;
-  background: white;
-  border-radius: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  opacity: 0;
-  transform: translateX(100%);
-  transition: transform 0.4s ease, opacity 0.3s;
-  z-index: 10;
-}
-
-.signup-panel.active {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.back-btn {
-  align-self: flex-start;
-  background: none;
-  border: none;
-  color: var(--moss);
-  font-family: var(--font-main);
-  font-weight: 600;
-  cursor: pointer;
+.google-btn {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
-  margin-bottom: 0.5rem;
+  justify-content: center;
+  gap: 0.7rem;
+  background: white;
+  color: #333;
+  border: 1px solid #ddd;
 }
 
-.back-btn:hover {
-  text-decoration: underline;
-}
-
-.panel-title {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: var(--gray-deep);
-  margin: 0.5rem 0 1.5rem;
+.switch-text {
   text-align: center;
-}
-
-.hint {
-  font-size: 0.85rem;
+  margin-top: 1.2rem;
   color: var(--gray-mid);
-  text-align: center;
-  margin-top: 1rem;
+  font-size: 0.95rem;
 }
 
-.hint a {
+.switch-text a {
   color: var(--moss);
   text-decoration: none;
+  font-weight: 600;
 }
 
-.hint a:hover {
+.switch-text a:hover {
   text-decoration: underline;
 }
 
-/* ─── AJUSTES RESPONSIVOS PARA MEJOR VISIBILIDAD ───────────────────────── */
-/* Compacto en pantallas pequeñas o baja altura */
-@media (max-height: 650px), (max-width: 480px) {
-  .card {
-    padding: 1.5rem;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-
-  .signup-panel {
-    padding: 1.5rem;
-  }
-
-  .logo-text {
-    font-size: 1.9rem;
-  }
-
-  .tagline {
-    font-size: 0.95rem;
-    margin-bottom: 1.2rem;
-  }
-
-  .panel-title {
-    font-size: 1.4rem;
-    margin: 0.5rem 0 1rem;
-  }
-
-  .input {
-    padding: 0.75rem 1rem;
-    font-size: 0.95rem;
-    margin-bottom: 0.8rem;
-  }
-
-  .input-group {
-    margin-bottom: 0.8rem;
-  }
-
-  .btn {
-    padding: 0.8rem;
-    font-size: 0.95rem;
-  }
-
-  .hint {
-    font-size: 0.75rem;
-    margin-top: 0.6rem;
-  }
-
-  /* Asegurar que el botón esté visible */
-  .signup-panel {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .signup-panel > *:not(.back-btn):not(.logo-container):not(.hint) {
-    flex-shrink: 0;
-  }
-
-  .signup-panel .primary-btn {
-    margin-top: auto;
-    margin-bottom: 0.5rem;
-  }
+/* ── AGENDA (solo se muestra tras login) ── */
+#app-container {
+  display: none;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  background: var(--ivory);
+  overflow: hidden;
 }
 
-/* Pantallas muy pequeñas (ej: iPhone SE) */
-@media (max-width: 375px) {
-  .card {
-    padding: 1rem;
-  }
-
-  .logo-text {
-    font-size: 1.7rem;
-  }
-
-  .tagline {
-    font-size: 0.85rem;
-    margin-bottom: 1rem;
-  }
-
-  .input {
-    padding: 0.65rem 0.9rem;
-    font-size: 0.9rem;
-  }
-
-  .btn {
-    padding: 0.7rem;
-    font-size: 0.9rem;
-  }
-
-  .panel-title {
-    font-size: 1.3rem;
-  }
+#app-container aside {
+  width: 260px;
+  background: white;
+  box-shadow: 8px 0 30px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  clip-path: polygon(0 0, 100% 0, 92% 100%, 0 100%);
 }
 
-/* ─── TOAST NOTIFICATIONS (reemplazo de alert) ─────────────────────────── */
+#app-container main {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.5rem;
+  cursor: pointer;
+  color: var(--gray-deep);
+  font-weight: 500;
+}
+
+.nav-item.active {
+  background: rgba(94, 125, 94, 0.08);
+  color: var(--moss);
+  border-left: 4px solid var(--moss);
+}
+
+#section-content textarea {
+  width: 100%;
+  min-height: 400px;
+  padding: 1.4rem;
+  border-radius: 20px;
+  border: 2px solid var(--gray-soft);
+  font-family: var(--font-main);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  resize: vertical;
+  background: white;
+  transition: all 0.3s;
+}
+
+/* ── TOAST NOTIFICATIONS ── */
 #toast-container {
   position: fixed;
   top: 20px;
@@ -392,21 +410,45 @@ body {
   to { opacity: 0; transform: translateY(-20px); }
 }
 
-/* ─── EXTRA: Scroll suave para card overflow ───────────────────────────── */
-.card {
-  scrollbar-width: thin;
-  scrollbar-color: var(--gray-soft) transparent;
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .landing-header {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .auth-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+  }
+
+  .btn-large {
+    padding: 0.8rem 1.6rem;
+    font-size: 1rem;
+  }
 }
 
-.card::-webkit-scrollbar {
-  width: 6px;
-}
+@media (max-height: 650px) {
+  .auth-form {
+    padding: 1.5rem;
+  }
 
-.card::-webkit-scrollbar-track {
-  background: transparent;
-}
+  .input {
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+  }
 
-.card::-webkit-scrollbar-thumb {
-  background-color: var(--gray-soft);
-  border-radius: 10px;
+  .btn {
+    padding: 0.7rem;
+    font-size: 0.95rem;
+  }
 }
