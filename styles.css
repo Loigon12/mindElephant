@@ -88,6 +88,7 @@ body {
   z-index: 1;
 }
 
+/* ─── INPUTS ───────────────────────────────────────────────────────────── */
 .input {
   width: 100%;
   padding: 1rem 1.3rem;
@@ -106,7 +107,7 @@ body {
   box-shadow: 0 0 0 4px rgba(94, 125, 94, 0.15);
 }
 
-/* Input con toggle de contraseña */
+/* Input con ícono de toggle (👁️) */
 .input-group {
   position: relative;
   margin-bottom: 1rem;
@@ -122,8 +123,14 @@ body {
   color: var(--gray-mid);
   cursor: pointer;
   font-size: 1.2rem;
+  padding: 0;
 }
 
+.toggle-password:hover {
+  color: var(--moss);
+}
+
+/* ─── BOTONES ──────────────────────────────────────────────────────────── */
 .btn {
   display: flex;
   align-items: center;
@@ -194,7 +201,7 @@ body {
 .divider::before { left: 0; }
 .divider::after { right: 0; }
 
-/* ─── PANEL DE REGISTRO ─────────────────────────────────────────────── */
+/* ─── PANEL DE REGISTRO ───────────────────────────────────────────────── */
 .signup-panel {
   position: absolute;
   top: 0;
@@ -211,10 +218,6 @@ body {
   transform: translateX(100%);
   transition: transform 0.4s ease, opacity 0.3s;
   z-index: 10;
-}
-
-.signup-panel.hidden {
-  display: none;
 }
 
 .signup-panel.active {
@@ -264,71 +267,100 @@ body {
   text-decoration: underline;
 }
 
-/* ─── AGENDA INTERFACE ─────────────────────────────────────────────── */
-#app-container {
-  display: none;
-  flex-direction: row;
-  height: 100vh;
-  width: 100vw;
-  background: var(--ivory);
-  overflow: hidden;
+/* ─── AJUSTES RESPONSIVOS PARA MEJOR VISIBILIDAD ───────────────────────── */
+/* Compacto en pantallas pequeñas o baja altura */
+@media (max-height: 650px), (max-width: 480px) {
+  .card {
+    padding: 1.5rem;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .signup-panel {
+    padding: 1.5rem;
+  }
+
+  .logo-text {
+    font-size: 1.9rem;
+  }
+
+  .tagline {
+    font-size: 0.95rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .panel-title {
+    font-size: 1.4rem;
+    margin: 0.5rem 0 1rem;
+  }
+
+  .input {
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .input-group {
+    margin-bottom: 0.8rem;
+  }
+
+  .btn {
+    padding: 0.8rem;
+    font-size: 0.95rem;
+  }
+
+  .hint {
+    font-size: 0.75rem;
+    margin-top: 0.6rem;
+  }
+
+  /* Asegurar que el botón esté visible */
+  .signup-panel {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .signup-panel > *:not(.back-btn):not(.logo-container):not(.hint) {
+    flex-shrink: 0;
+  }
+
+  .signup-panel .primary-btn {
+    margin-top: auto;
+    margin-bottom: 0.5rem;
+  }
 }
 
-#app-container aside {
-  width: 260px;
-  background: white;
-  box-shadow: 8px 0 30px rgba(0,0,0,0.08);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  clip-path: polygon(0 0, 100% 0, 92% 100%, 0 100%);
+/* Pantallas muy pequeñas (ej: iPhone SE) */
+@media (max-width: 375px) {
+  .card {
+    padding: 1rem;
+  }
+
+  .logo-text {
+    font-size: 1.7rem;
+  }
+
+  .tagline {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .input {
+    padding: 0.65rem 0.9rem;
+    font-size: 0.9rem;
+  }
+
+  .btn {
+    padding: 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  .panel-title {
+    font-size: 1.3rem;
+  }
 }
 
-#app-container main {
-  flex: 1;
-  padding: 2rem;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.9rem 1.5rem;
-  cursor: pointer;
-  color: var(--gray-deep);
-  font-weight: 500;
-}
-
-.nav-item.active {
-  background: rgba(94, 125, 94, 0.08);
-  color: var(--moss);
-  border-left: 4px solid var(--moss);
-}
-
-#section-content textarea {
-  width: 100%;
-  min-height: 400px;
-  padding: 1.4rem;
-  border-radius: 20px;
-  border: 2px solid var(--gray-soft);
-  font-family: var(--font-main);
-  font-size: 1.1rem;
-  line-height: 1.7;
-  resize: vertical;
-  background: white;
-  transition: all 0.3s;
-}
-
-#section-content textarea:focus {
-  outline: none;
-  border-color: var(--moss);
-  box-shadow: 0 0 0 4px rgba(94, 125, 94, 0.1);
-}
-
-/* Toast notifications */
+/* ─── TOAST NOTIFICATIONS (reemplazo de alert) ─────────────────────────── */
 #toast-container {
   position: fixed;
   top: 20px;
@@ -360,9 +392,21 @@ body {
   to { opacity: 0; transform: translateY(-20px); }
 }
 
-/* ─── RESPONSIVE ────────────────────────────────────────────────────── */
-@media (max-width: 480px) {
-  .card { padding: 1.8rem; }
-  .logo-text { font-size: 1.9rem; }
-  #app-container aside { width: 220px; }
+/* ─── EXTRA: Scroll suave para card overflow ───────────────────────────── */
+.card {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-soft) transparent;
+}
+
+.card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.card::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.card::-webkit-scrollbar-thumb {
+  background-color: var(--gray-soft);
+  border-radius: 10px;
 }
