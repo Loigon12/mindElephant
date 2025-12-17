@@ -1,4 +1,3 @@
-/* ── VARIABLES GLOBALES ── */
 :root {
   --gray-soft: #e9ecef;
   --gray-mid: #adb5bd;
@@ -19,16 +18,13 @@
 body {
   font-family: var(--font-main);
   color: var(--gray-deep);
-  background: white;
-  overflow-x: hidden;
+  line-height: 1.6;
 }
 
 /* ── LANDING ── */
 .landing {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
   background: linear-gradient(135deg, #f9f7f0 0%, #f0f4e8 100%);
+  min-height: 100vh;
   padding: 2rem 1.5rem;
 }
 
@@ -39,7 +35,7 @@ body {
   margin-bottom: 3rem;
 }
 
-.logo {
+.logo, .logo-center {
   display: flex;
   align-items: center;
   gap: 0.8rem;
@@ -59,7 +55,7 @@ body {
   color: transparent;
 }
 
-.auth-buttons {
+.nav-auth, .auth-buttons {
   display: flex;
   gap: 0.8rem;
 }
@@ -73,6 +69,7 @@ body {
   cursor: pointer;
   border: none;
   transition: all 0.3s;
+  text-decoration: none;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -103,7 +100,7 @@ body {
 .btn-large {
   padding: 1rem 2rem;
   font-size: 1.1rem;
-  margin-top: 2rem;
+  margin: 2rem 0;
 }
 
 .landing-main {
@@ -139,11 +136,6 @@ body {
   padding: 2rem;
   border-radius: 20px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.05);
-  transition: transform 0.3s;
-}
-
-.feature:hover {
-  transform: translateY(-6px);
 }
 
 .feature-icon {
@@ -158,41 +150,46 @@ body {
   color: var(--gray-deep);
 }
 
-.feature p {
-  color: var(--gray-mid);
-  line-height: 1.6;
-}
-
-.philosophy {
+.philosophy, .how-it-works {
   background: rgba(94, 125, 94, 0.05);
-  padding: 2rem;
+  padding: 2.5rem;
   border-radius: 20px;
-  margin-bottom: 2rem;
-  font-style: italic;
+  margin: 3rem 0;
+  text-align: left;
 }
 
-.philosophy p {
-  font-size: 1.1rem;
-  line-height: 1.7;
-  color: var(--gray-deep);
-}
-
-.philosophy strong {
+.philosophy h2, .how-it-works h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
   color: var(--moss);
 }
 
-/* ── MODAL DE AUTENTICACIÓN ── */
-.auth-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.6);
-  z-index: 1000;
+.how-it-works ol {
+  text-align: left;
+  max-width: 600px;
+  margin: 1.5rem auto;
+  padding-left: 1.5rem;
+}
+
+.how-it-works li {
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+}
+
+.landing-footer {
+  margin-top: 3rem;
+  color: var(--gray-mid);
+  font-size: 0.9rem;
+}
+
+/* ── AUTH ── */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
   align-items: center;
   justify-content: center;
+  background: var(--ivory);
+  padding: 1rem;
 }
 
 .auth-card {
@@ -200,32 +197,16 @@ body {
   border-radius: 28px;
   width: 95%;
   max-width: 420px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-  position: relative;
 }
 
 .auth-form {
   padding: 2.5rem;
-  position: relative;
-}
-
-.close-btn {
-  position: absolute;
-  top: 1.2rem;
-  right: 1.2rem;
-  font-size: 1.8rem;
-  background: none;
-  border: none;
-  color: var(--gray-mid);
-  cursor: pointer;
 }
 
 .logo-center {
-  display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.8rem;
   margin-bottom: 1.8rem;
 }
 
@@ -316,55 +297,112 @@ body {
   font-weight: 600;
 }
 
-.switch-text a:hover {
-  text-decoration: underline;
+.back-link {
+  display: block;
+  text-align: center;
+  margin-top: 1.5rem;
+  color: var(--gray-mid);
+  text-decoration: none;
+  font-size: 0.9rem;
 }
 
-/* ── AGENDA (solo se muestra tras login) ── */
+/* ── APP (AGENDA) ── */
 #app-container {
-  display: none;
-  flex-direction: row;
+  display: flex;
   height: 100vh;
-  width: 100vw;
   background: var(--ivory);
-  overflow: hidden;
 }
 
 #app-container aside {
-  width: 260px;
+  width: 240px;
   background: white;
   box-shadow: 8px 0 30px rgba(0,0,0,0.08);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  clip-path: polygon(0 0, 100% 0, 92% 100%, 0 100%);
 }
 
-#app-container main {
-  flex: 1;
-  padding: 2rem;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-.nav-item {
+.user-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--gray-soft);
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--amber);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--gray-deep);
+}
+
+.user-email {
+  font-size: 0.8rem;
+  color: var(--gray-mid);
+}
+
+nav {
+  flex: 1;
+  padding: 1rem 0;
+}
+
+.nav-item {
   padding: 0.9rem 1.5rem;
   cursor: pointer;
   color: var(--gray-deep);
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.nav-item:hover {
+  background: rgba(94, 125, 94, 0.05);
 }
 
 .nav-item.active {
-  background: rgba(94, 125, 94, 0.08);
+  background: rgba(94, 125, 94, 0.1);
   color: var(--moss);
-  border-left: 4px solid var(--moss);
+  border-left: 3px solid var(--moss);
 }
 
-#section-content textarea {
+.logout-btn {
+  margin: 0 1.5rem 1.5rem;
+  background: #e57373;
+  color: white;
+  width: calc(100% - 3rem);
+}
+
+#app-container main {
+  flex: 1;
+  padding: 2.5rem;
+  overflow-y: auto;
+}
+
+.section-header h1 {
+  font-size: 2rem;
+  color: var(--gray-deep);
+  margin-bottom: 0.4rem;
+}
+
+.section-subtitle {
+  color: var(--gray-mid);
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.section-content textarea {
   width: 100%;
   min-height: 400px;
   padding: 1.4rem;
@@ -378,7 +416,19 @@ body {
   transition: all 0.3s;
 }
 
-/* ── TOAST NOTIFICATIONS ── */
+.section-content textarea:focus {
+  outline: none;
+  border-color: var(--moss);
+  box-shadow: 0 0 0 4px rgba(94, 125, 94, 0.1);
+}
+
+.loading {
+  text-align: center;
+  color: var(--gray-mid);
+  padding: 2rem;
+}
+
+/* ── TOAST ── */
 #toast-container {
   position: fixed;
   top: 20px;
@@ -412,43 +462,7 @@ body {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 600px) {
-  .landing-header {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .auth-buttons {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .hero-title {
-    font-size: 2.2rem;
-  }
-
-  .btn {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.95rem;
-  }
-
-  .btn-large {
-    padding: 0.8rem 1.6rem;
-    font-size: 1rem;
-  }
-}
-
-@media (max-height: 650px) {
-  .auth-form {
-    padding: 1.5rem;
-  }
-
-  .input {
-    padding: 0.75rem 1rem;
-    font-size: 0.95rem;
-  }
-
-  .btn {
-    padding: 0.7rem;
-    font-size: 0.95rem;
-  }
+  .landing-header { flex-direction: column; gap: 1.5rem; }
+  .hero-title { font-size: 2.2rem; }
+  .btn { padding: 0.6rem 1.2rem; font-size: 0.95rem; }
 }

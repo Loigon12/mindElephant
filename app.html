@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mi Agenda · MindElephant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div id="app-container">
+    <aside>
+      <div class="user-header">
+        <div class="avatar" id="user-avatar">?</div>
+        <div>
+          <div class="user-name" id="user-name">Cargando...</div>
+          <div class="user-email" id="user-email">—</div>
+        </div>
+      </div>
+      <nav>
+        <div class="nav-item active" data-section="ideas">💡 Ideas</div>
+        <div class="nav-item" data-section="reminders">🔔 Recordatorios</div>
+        <div class="nav-item" data-section="dates">📅 Fechas</div>
+      </nav>
+      <button class="btn logout-btn" onclick="logout()">🚪 Salir</button>
+    </aside>
+    <main>
+      <div class="section-header">
+        <h1 id="section-title">Mi Agenda</h1>
+        <p id="section-subtitle">¿Qué tienes en mente hoy?</p>
+      </div>
+      <div class="section-content">
+        <div class="loading">Cargando...</div>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="firebaseConfig.js"></script>
+  <script src="scriptApp.js"></script>
+</body>
+</html>
