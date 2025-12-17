@@ -1,5 +1,4 @@
 /* ─── MIND ELEPHANT THEME — Inspirado en la calma, fuerza y memoria del elefante ─── */
-
 :root {
   /* Paleta suave y natural */
   --gray-soft: #e9ecef;      /* piel suave */
@@ -9,7 +8,6 @@
   --sage: #8a9a8d;           /* bosque / equilibrio */
   --moss: #5e7d5e;           /* profundidad / memoria */
   --amber: #d4a017;          /* sabiduría / atención */
-
   --font-main: 'Quicksand', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
@@ -108,6 +106,24 @@ body {
   box-shadow: 0 0 0 4px rgba(94, 125, 94, 0.15);
 }
 
+/* Input con toggle de contraseña */
+.input-group {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--gray-mid);
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
 .btn {
   display: flex;
   align-items: center;
@@ -128,6 +144,7 @@ body {
   background: var(--moss);
   color: white;
 }
+
 .primary-btn:hover {
   background: #4e6c4e;
   transform: translateY(-2px);
@@ -139,6 +156,7 @@ body {
   border: 2px solid var(--moss);
   color: var(--moss);
 }
+
 .secondary-btn:hover {
   background: var(--moss);
   color: white;
@@ -150,6 +168,7 @@ body {
   border: 1px solid #ddd;
   margin-top: 0.5rem;
 }
+
 .google-btn:hover {
   background: #f8f9fa;
 }
@@ -161,6 +180,7 @@ body {
   color: var(--gray-mid);
   font-weight: 500;
 }
+
 .divider::before,
 .divider::after {
   content: '';
@@ -170,6 +190,7 @@ body {
   height: 1px;
   background: var(--gray-soft);
 }
+
 .divider::before { left: 0; }
 .divider::after { right: 0; }
 
@@ -190,6 +211,10 @@ body {
   transform: translateX(100%);
   transition: transform 0.4s ease, opacity 0.3s;
   z-index: 10;
+}
+
+.signup-panel.hidden {
+  display: none;
 }
 
 .signup-panel.active {
@@ -234,12 +259,110 @@ body {
   color: var(--moss);
   text-decoration: none;
 }
+
 .hint a:hover {
   text-decoration: underline;
+}
+
+/* ─── AGENDA INTERFACE ─────────────────────────────────────────────── */
+#app-container {
+  display: none;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  background: var(--ivory);
+  overflow: hidden;
+}
+
+#app-container aside {
+  width: 260px;
+  background: white;
+  box-shadow: 8px 0 30px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  clip-path: polygon(0 0, 100% 0, 92% 100%, 0 100%);
+}
+
+#app-container main {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.5rem;
+  cursor: pointer;
+  color: var(--gray-deep);
+  font-weight: 500;
+}
+
+.nav-item.active {
+  background: rgba(94, 125, 94, 0.08);
+  color: var(--moss);
+  border-left: 4px solid var(--moss);
+}
+
+#section-content textarea {
+  width: 100%;
+  min-height: 400px;
+  padding: 1.4rem;
+  border-radius: 20px;
+  border: 2px solid var(--gray-soft);
+  font-family: var(--font-main);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  resize: vertical;
+  background: white;
+  transition: all 0.3s;
+}
+
+#section-content textarea:focus {
+  outline: none;
+  border-color: var(--moss);
+  box-shadow: 0 0 0 4px rgba(94, 125, 94, 0.1);
+}
+
+/* Toast notifications */
+#toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.toast {
+  background: #e57373;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  margin-bottom: 10px;
+  animation: fadeIn 0.3s, fadeOut 0.5s 2.5s forwards;
+}
+
+.toast.success {
+  background: #66bb6a;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; transform: translateY(-20px); }
 }
 
 /* ─── RESPONSIVE ────────────────────────────────────────────────────── */
 @media (max-width: 480px) {
   .card { padding: 1.8rem; }
   .logo-text { font-size: 1.9rem; }
+  #app-container aside { width: 220px; }
 }

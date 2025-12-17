@@ -1,12 +1,67 @@
 // ─── ESTADO GLOBAL ─────────────────────────────────────────────────────
 let currentUser = null;
+let saveTimeout = null;
+let toastId = 0;
 
-// ─── ESCUCHAR CAMBIOS DE AUTENTICACIÓN (CLAVE PARA REDIRECCIÓN) ───────
+// ─── UTILIDADES ─────────────────────────────────────────────────────────
+function showToast(message, type = 'error') {
+  const container = document.getElementById('toast-container');
+  if (!container) {
+    const newContainer = document.createElement('div');
+    newContainer.id = 'toast-container';
+    newContainer.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+    `;
+    document.body.appendChild(newContainer);
+  }
+
+  const id = `toast-${++toastId}`;
+  const toast = document.createElement('div');
+  toast.id = id;
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  toast.style.cssText = `
+    background: ${type === 'success' ? '#66bb6a' : '#e57373'};
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    margin-bottom: 10px;
+    animation: fadeIn 0.3s, fadeOut 0.5s 2.5s forwards;
+  `;
+  toast.innerHTML += `
+    <style>
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes fadeOut { to { opacity: 0; transform: translateY(-20px); } }
+    </style>
+  `;
+  document.getElementById('toast-container').appendChild(toast);
+
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }, 3000);
+}
+
+function togglePassword(id) {
+  const input = document.getElementById(id);
+  if (input) {
+    input.type = input.type === 'password' ? 'text' : 'password';
+  }
+}
+
+// ─── ESCUCHAR CAMBIOS DE AUTENTICACIÓN ──────────────────────────────────
 auth.onAuthStateChanged(user => {
   if (user) {
     currentUser = user;
     showAgenda();
   } else {
+    if (saveTimeout) clearTimeout(saveTimeout);
+    currentUser = null;
     showLogin();
   }
 });
@@ -21,13 +76,11 @@ function showAgenda() {
   const container = document.querySelector('.login-container');
   if (container) container.style.display = 'none';
 
-  // Si ya existe la agenda, solo la mostramos
   if (document.getElementById('app-container')) {
     document.getElementById('app-container').style.display = 'flex';
     return;
   }
 
-  // Si no, la creamos (solo una vez)
   createAgendaInterface();
 }
 
@@ -45,7 +98,7 @@ function createAgendaInterface() {
     overflow: hidden;
   `;
 
-  // Sidebar (menú lateral temático)
+  // Sidebar
   const sidebar = document.createElement('aside');
   sidebar.style.cssText = `
     width: 260px;
@@ -57,8 +110,9 @@ function createAgendaInterface() {
     clip-path: polygon(0 0, 100% 0, 92% 100%, 0 100%);
   `;
 
-  const name = currentUser.email.split('@')[0];
-  const initial = name[0].toUpperCase();
+  // Manejo seguro de nombre/email
+  const name = (currentUser?.email || 'Usuario').split('@')[0];
+  const initial = name.charAt(0).toUpperCase();
 
   sidebar.innerHTML = `
     <div style="padding: 1.8rem 1.5rem 1.5rem; border-bottom: 1px solid #e9ecef; display: flex; align-items: center; gap: 1rem;">
@@ -70,23 +124,23 @@ function createAgendaInterface() {
     </div>
     <nav style="flex: 1; padding: 1rem 0;">
       <div class="nav-item active" data-section="ideas" style="display: flex; align-items: center; gap: 1rem; padding: 0.9rem 1.5rem; cursor: pointer; color: #495057; font-weight: 500;">
-        <span></span> <span>Ideas</span>
+        <span>💡</span> <span>Ideas</span>
       </div>
       <div class="nav-item" data-section="reminders" style="display: flex; align-items: center; gap: 1rem; padding: 0.9rem 1.5rem; cursor: pointer; color: #495057; font-weight: 500;">
-        <span></span> <span>Recordatorios</span>
+        <span>🔔</span> <span>Recordatorios</span>
       </div>
       <div class="nav-item" data-section="dates" style="display: flex; align-items: center; gap: 1rem; padding: 0.9rem 1.5rem; cursor: pointer; color: #495057; font-weight: 500;">
-        <span></span> <span>Fechas</span>
+        <span>📅</span> <span>Fechas</span>
       </div>
     </nav>
     <div style="padding: 0 0 1.5rem;">
       <button onclick="logout()" style="display: flex; align-items: center; gap: 1rem; width: calc(100% - 3rem); margin: 0 1.5rem; padding: 0.75rem; background: #e57373; color: white; border: none; border-radius: 50px; font-family: inherit; font-weight: 600; cursor: pointer; transition: all 0.2s;">
-        <span></span> <span>Salir</span>
+        <span>🚪</span> <span>Salir</span>
       </button>
     </div>
   `;
 
-  // Contenido principal
+  // Main content
   const main = document.createElement('main');
   main.style.cssText = `
     flex: 1;
@@ -120,82 +174,72 @@ function createAgendaInterface() {
     });
   });
 
-  // Cargar primera sección
   loadSection('ideas');
 }
 
 // ─── CARGAR SECCIÓN DINÁMICAMENTE ───────────────────────────────────────
-let saveTimeout;
 async function loadSection(section) {
   if (!currentUser) return;
 
-  const titles = {
-    ideas: '💡 Ideas',
-    reminders: 'Recordatorios',
-    dates: 'Fechas Importantes'
+  // Limpiar timeout anterior al cambiar de sección
+  if (saveTimeout) clearTimeout(saveTimeout);
+
+  const sectionData = {
+    ideas: {
+      title: '💡 Ideas',
+      subtitle: '¿Qué tienes en mente hoy?',
+      placeholder: `Ej: \n• Diseñar MindElephant v2\n• Leer 'Sapiens' antes de fin de año\n• Aprender a tocar piano 🎹`
+    },
+    reminders: {
+      title: '🔔 Recordatorios',
+      subtitle: 'Lo que no debes olvidar',
+      placeholder: `Ej: \n• Llamar a mamá (viernes 18:00)\n• Revisar contrato (antes del 30)\n• Comprar víveres`
+    },
+    dates: {
+      title: '📅 Fechas Importantes',
+      subtitle: 'Momentos que marcan la diferencia',
+      placeholder: `Ej: \n• 2025-12-16 → Entrega MVP\n• 2026-03-10 → Cumple de Ana\n• 2026-06-?? → Vacaciones`
+    }
   };
 
-  const subtitles = {
-    ideas: '¿Qué tienes en mente hoy?',
-    reminders: 'Lo que no debes olvidar',
-    dates: 'Momentos que marcan la diferencia'
-  };
+  const { title, subtitle, placeholder } = sectionData[section] || sectionData.ideas;
 
-  const placeholders = {
-    ideas: `Ej: 
-• Diseñar MindElephant v2
-• Leer 'Sapiens' antes de fin de año
-• Aprender a tocar piano `,
-    reminders: `Ej: 
-• Llamar a mamá (viernes 18:00)
-• Revisar contrato (antes del 30)
-• Comprar víveres`,
-    dates: `Ej: 
-• 2025-12-16 → Entrega MVP
-• 2026-03-10 → Cumple de Ana
-• 2026-06-?? → Vacaciones`
-  };
+  document.querySelector('#section-header h1').textContent = title;
+  document.getElementById('section-subtitle').textContent = subtitle;
 
-  document.getElementById('section-header').querySelector('h1').textContent = titles[section];
-  document.getElementById('section-subtitle').textContent = subtitles[section];
-
-  // Mostrar loading
   document.getElementById('section-content').innerHTML = `
     <div style="text-align: center; color: #6c757d; padding: 2rem;">Cargando...</div>
   `;
 
   try {
-    // Cargar datos de Firestore
-    const doc = await db.collection('users').doc(currentUser.uid).get();
-    const data = doc.exists ? doc.data() : { ideas: '', reminders: '', dates: '' };
+    const userDoc = await db.collection('users').doc(currentUser.uid).get();
+    const data = userDoc.exists ? userDoc.data() : { ideas: '', reminders: '', dates: '' };
 
-    // Renderizar textarea
     document.getElementById('section-content').innerHTML = `
-      <textarea id="content-textarea" 
+      <textarea id="content-textarea"
                 style="width: 100%; min-height: 400px; padding: 1.4rem; border-radius: 20px; border: 2px solid #e9ecef; font-family: inherit; font-size: 1.1rem; line-height: 1.7; resize: vertical; background: white; transition: all 0.3s;"
-                placeholder="${placeholders[section]}">${data[section] || ''}</textarea>
+                placeholder="${placeholder.replace(/</g, '&lt;').replace(/>/g, '&gt;')}">${(data[section] || '').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</textarea>
     `;
 
-    // Guardar automáticamente con debounce
     const textarea = document.getElementById('content-textarea');
-    textarea.addEventListener('input', () => {
-      clearTimeout(saveTimeout);
-      saveTimeout = setTimeout(() => {
-        saveToFirestore(section, textarea.value);
-      }, 800);
-    });
-
+    if (textarea) {
+      textarea.addEventListener('input', () => {
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(() => {
+          saveToFirestore(section, textarea.value);
+        }, 800);
+      });
+    }
   } catch (err) {
     console.error('Error cargando sección:', err);
-    document.getElementById('section-content').innerHTML = `
-      <div style="text-align: center; color: #e57373; padding: 2rem;"> Error al cargar. Revisa tu conexión.</div>
-    `;
+    showToast('No se pudo cargar. ¿Estás conectado?', 'error');
   }
 }
 
 // ─── GUARDAR EN FIRESTORE ───────────────────────────────────────────────
 async function saveToFirestore(section, value) {
   if (!currentUser) return;
+
   try {
     await db.collection('users').doc(currentUser.uid).update({
       [section]: value,
@@ -204,6 +248,7 @@ async function saveToFirestore(section, value) {
     console.log(`${section} guardado`);
   } catch (err) {
     console.error('Error al guardar:', err);
+    showToast('No se pudo guardar. Revisa tu conexión.', 'error');
   }
 }
 
@@ -211,10 +256,16 @@ async function saveToFirestore(section, value) {
 function handleLogin() {
   const email = document.getElementById('email')?.value.trim();
   const password = document.getElementById('password')?.value;
-  if (!email || !password) return alert('Por favor ingresa correo y contraseña.');
-  
+  if (!email || !password) return showToast('Correo y contraseña obligatorios.');
+
   auth.signInWithEmailAndPassword(email, password)
-    .catch(err => alert('Error: ' + (err.message || 'Intenta de nuevo.')));
+    .catch(err => {
+      let msg = err.message;
+      if (msg.includes('user-not-found') || msg.includes('wrong-password')) {
+        msg = 'Correo o contraseña incorrectos.';
+      }
+      showToast(msg);
+    });
 }
 
 function handleSignUp() {
@@ -223,9 +274,9 @@ function handleSignUp() {
   const confirm = document.getElementById('signup-confirm')?.value;
   const fullname = document.getElementById('fullname')?.value;
 
-  if (!email || !password) return alert('Correo y contraseña obligatorios.');
-  if (password.length < 6) return alert('Contraseña ≥6 caracteres.');
-  if (password !== confirm) return alert('Las contraseñas no coinciden.');
+  if (!email || !password) return showToast('Correo y contraseña obligatorios.');
+  if (password.length < 6) return showToast('Contraseña debe tener ≥6 caracteres.');
+  if (password !== confirm) return showToast('Las contraseñas no coinciden.');
 
   auth.createUserWithEmailAndPassword(email, password)
     .then(async (userCredential) => {
@@ -238,14 +289,14 @@ function handleSignUp() {
         dates: '',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
-      alert(`¡Cuenta creada!\nBienvenido a MindElephant, ${fullname || 'amigo'} `);
+      showToast(`¡Bienvenido${fullname ? `, ${fullname}` : ''}!`, 'success');
     })
     .catch(err => {
       let msg = err.message;
       if (msg.includes('email-already-in-use')) {
-        msg = 'Este correo ya está registrado. ¿Quieres iniciar sesión?';
+        msg = 'Este correo ya está registrado.';
       }
-      alert('Error: ' + msg);
+      showToast(msg);
     });
 }
 
@@ -254,7 +305,7 @@ function signInWithGoogle() {
   auth.signInWithRedirect(provider);
 }
 
-// Manejar resultado de redirección (importante para Google)
+// Manejar resultado de redirección
 auth.getRedirectResult()
   .then((result) => {
     if (result.user) {
@@ -263,20 +314,26 @@ auth.getRedirectResult()
   })
   .catch((error) => {
     console.error("Error en Google Sign-In:", error);
-    alert('Error con Google: ' + error.message);
+    showToast('Error con Google: ' + (error.message || 'Intenta de nuevo.'));
   });
 
 // ─── CERRAR SESIÓN ──────────────────────────────────────────────────────
 function logout() {
-  auth.signOut();
+  if (saveTimeout) clearTimeout(saveTimeout);
+  auth.signOut().catch(err => {
+    console.error('Error al cerrar sesión:', err);
+    showToast('Error al cerrar sesión. Intenta de nuevo.');
+  });
 }
 
-// ─── CONTROL DE PANELES (login/signup) -──────────────────────────────────
+// ─── CONTROL DE PANELES (login/signup) ───────────────────────────────────
 function showLoginPanel() {
   const panel = document.getElementById('signup-panel');
   if (panel) {
     panel.classList.remove('active');
-    setTimeout(() => panel.classList.add('hidden'), 400);
+    setTimeout(() => {
+      panel.classList.add('hidden');
+    }, 400);
   }
 }
 
@@ -284,6 +341,8 @@ function showSignupPanel() {
   const panel = document.getElementById('signup-panel');
   if (panel) {
     panel.classList.remove('hidden');
-    setTimeout(() => panel.classList.add('active'), 10);
+    setTimeout(() => {
+      panel.classList.add('active');
+    }, 10);
   }
 }
