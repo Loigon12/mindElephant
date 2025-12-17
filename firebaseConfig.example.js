@@ -1,4 +1,4 @@
-// 📝 Rellena con tu configuración desde Firebase Console
+
 const firebaseConfig = {
   apiKey: "AIzaSyBTSxooiVG5p0LHPkYBIHgWRntsya-FTGY",
   authDomain: "mindelephant.firebaseapp.com",

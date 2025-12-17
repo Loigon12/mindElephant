@@ -124,18 +124,18 @@ function createAgendaInterface() {
     </div>
     <nav style="flex: 1; padding: 1rem 0;">
       <div class="nav-item active" data-section="ideas" style="display: flex; align-items: center; gap: 1rem; padding: 0.9rem 1.5rem; cursor: pointer; color: #495057; font-weight: 500;">
-        <span>💡</span> <span>Ideas</span>
+        <span></span> <span>Ideas</span>
       </div>
       <div class="nav-item" data-section="reminders" style="display: flex; align-items: center; gap: 1rem; padding: 0.9rem 1.5rem; cursor: pointer; color: #495057; font-weight: 500;">
-        <span>🔔</span> <span>Recordatorios</span>
+        <span></span> <span>Recordatorios</span>
       </div>
       <div class="nav-item" data-section="dates" style="display: flex; align-items: center; gap: 1rem; padding: 0.9rem 1.5rem; cursor: pointer; color: #495057; font-weight: 500;">
-        <span>📅</span> <span>Fechas</span>
+        <span></span> <span>Fechas</span>
       </div>
     </nav>
     <div style="padding: 0 0 1.5rem;">
       <button onclick="logout()" style="display: flex; align-items: center; gap: 1rem; width: calc(100% - 3rem); margin: 0 1.5rem; padding: 0.75rem; background: #e57373; color: white; border: none; border-radius: 50px; font-family: inherit; font-weight: 600; cursor: pointer; transition: all 0.2s;">
-        <span>🚪</span> <span>Salir</span>
+        <span></span> <span>Salir</span>
       </button>
     </div>
   `;
@@ -186,17 +186,17 @@ async function loadSection(section) {
 
   const sectionData = {
     ideas: {
-      title: '💡 Ideas',
+      title: 'Ideas',
       subtitle: '¿Qué tienes en mente hoy?',
       placeholder: `Ej: \n• Diseñar MindElephant v2\n• Leer 'Sapiens' antes de fin de año\n• Aprender a tocar piano 🎹`
     },
     reminders: {
-      title: '🔔 Recordatorios',
+      title: 'Recordatorios',
       subtitle: 'Lo que no debes olvidar',
       placeholder: `Ej: \n• Llamar a mamá (viernes 18:00)\n• Revisar contrato (antes del 30)\n• Comprar víveres`
     },
     dates: {
-      title: '📅 Fechas Importantes',
+      title: 'Fechas Importantes',
       subtitle: 'Momentos que marcan la diferencia',
       placeholder: `Ej: \n• 2025-12-16 → Entrega MVP\n• 2026-03-10 → Cumple de Ana\n• 2026-06-?? → Vacaciones`
     }
