@@ -5,14 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MindElephant — Tu memoria digital</title>
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
-  <!-- Precarga de fuente para evitar FOIT -->
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet"></noscript>
+
+  <!-- Estilos toast (para reemplazar alert) -->
+  <style>
+    #toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+    .toast {
+      background: #e57373;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 500;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      margin-bottom: 10px;
+      animation: fadeIn 0.3s, fadeOut 0.5s 2.5s forwards;
+    }
+    .toast.success { background: #66bb6a; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; transform: translateY(-20px); }
+    }
+  </style>
+
+  <!-- Firebase SDKs (modo compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
-  <!-- Login / Signup UI -->
-  <div class="login-container" id="login-container">
+  <div class="login-container">
     <div class="card" id="login-card">
       <!-- LOGIN PRINCIPAL -->
       <div class="logo-container">
@@ -25,10 +53,14 @@
       <p class="tagline">Donde las ideas nunca se olvidan</p>
 
       <input type="email" id="email" class="input" placeholder="Correo electrónico" autocomplete="email" />
-      <div class="input-group">
+
+      <div class="input-group" style="position: relative;">
         <input type="password" id="password" class="input" placeholder="Contraseña" autocomplete="current-password" />
-        <button type="button" class="toggle-password" onclick="togglePassword('password')">👁️</button>
+        <button type="button" class="toggle-password"
+                onclick="togglePassword('password')"
+                style="position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #adb5bd; cursor: pointer; font-size: 1.2rem;">👁️</button>
       </div>
+
       <button class="btn primary-btn" onclick="handleLogin()">Iniciar Sesión</button>
       <button class="btn secondary-btn" onclick="showSignupPanel()">Crear Cuenta</button>
 
@@ -49,16 +81,25 @@
           </svg>
           <h2 class="panel-title">Crea tu mente digital</h2>
         </div>
+
         <input type="text" id="fullname" class="input" placeholder="Nombre completo (opcional)" />
+
         <input type="email" id="signup-email" class="input" placeholder="Correo electrónico" autocomplete="email" />
-        <div class="input-group">
+
+        <div class="input-group" style="position: relative;">
           <input type="password" id="signup-password" class="input" placeholder="Contraseña (mín. 6 caracteres)" autocomplete="new-password" />
-          <button type="button" class="toggle-password" onclick="togglePassword('signup-password')">👁️</button>
+          <button type="button" class="toggle-password"
+                  onclick="togglePassword('signup-password')"
+                  style="position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #adb5bd; cursor: pointer; font-size: 1.2rem;">👁️</button>
         </div>
-        <div class="input-group">
+
+        <div class="input-group" style="position: relative;">
           <input type="password" id="signup-confirm" class="input" placeholder="Confirma tu contraseña" />
-          <button type="button" class="toggle-password" onclick="togglePassword('signup-confirm')">👁️</button>
+          <button type="button" class="toggle-password"
+                  onclick="togglePassword('signup-confirm')"
+                  style="position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #adb5bd; cursor: pointer; font-size: 1.2rem;">👁️</button>
         </div>
+
         <button class="btn primary-btn" onclick="handleSignUp()">Crear Cuenta</button>
         <p class="hint">
           Al registrarte, aceptas nuestros <a href="#">Términos</a> y <a href="#">Política de Privacidad</a>.
@@ -67,13 +108,11 @@
     </div>
   </div>
 
-  <!-- Contenedor principal de la app (dinámico) -->
-  <div id="app-container" style="display: none;"></div>
-
-  <!-- Toast container -->
+  <!-- Toast container (dinámico; se crea si no existe) -->
   <div id="toast-container"></div>
 
-  <!-- Firebase modular (v9+) -->
-  <script type="module" src="app.js"></script>
+  <!-- Scripts (orden crítico) -->
+  <script src="firebaseConfig.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
